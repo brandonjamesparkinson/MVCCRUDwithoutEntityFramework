@@ -1,47 +1,48 @@
-﻿@model IEnumerable<MVCCRUDwithoutEntityFramework.Models.BookViewModel>
+﻿@model System.Data.DataTable
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "List of Books";
 }
 
-<h1>Index</h1>
+<div class="jumbotron">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+<table class="table table-bordered">
+    <thead class="thead-light">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Book Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                Author
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Price
             </th>
-            <th></th>
+            <th>
+                <a asp-action="AddOrEdit">Create New</a>
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BookID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BookID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BookID">Delete</a>
-            </td>
-        </tr>
-}
+        @for (int i = 0; i < Model.Rows.Count; i++)
+        {
+            <tr>
+                <td>
+                    @Model.Rows[i]["Title"]
+                </td>
+                <td>
+                    @Model.Rows[i]["Author"]
+                </td>
+                <td>
+                    @Model.Rows[i]["Price"]
+                </td>
+                <td>
+                    <a asp-action="AddOrEdit" asp-route-id="@Model.Rows[i]["BookID"]">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@Model.Rows[i]["BookID"]">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
