@@ -74,7 +74,8 @@ namespace MVCCRUDwithoutEntityFramework.Controllers
         // GET: Book/Delete/5
         public IActionResult Delete(int? id)
         {
-            return View();
+            BookViewModel bookViewModel = FetchBookByID(id);
+            return View(bookViewModel);
         }
 
         // POST: Book/Delete/5
@@ -82,7 +83,14 @@ namespace MVCCRUDwithoutEntityFramework.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-
+            using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("DevConnection")))
+            {
+                sqlConnection.Open();
+                SqlCommand sqlCmd = new SqlCommand("BookDeleteByID", sqlConnection);
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("BookID", id);
+                sqlCmd.ExecuteNonQuery();
+            }
             return RedirectToAction(nameof(Index));
         }
 
